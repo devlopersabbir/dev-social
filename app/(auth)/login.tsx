@@ -1,9 +1,27 @@
 import { COLORS } from "@/constants/theme";
 import { styles } from "@/styles/auth.style";
+import { useSSO } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export default function Login() {
+  const { startSSOFlow } = useSSO();
+  const router = useRouter();
+  const loginHandler = async () => {
+    try {
+      const { createdSessionId, setActive } = await startSSOFlow({
+        strategy: "oauth_google",
+      });
+      if (setActive && createdSessionId) {
+        setActive({ session: createdSessionId });
+        router.replace("/(tabs)");
+      }
+    } catch (err) {
+      alert("fail to signup ");
+      console.log(err);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.brandSection}>
@@ -25,7 +43,11 @@ export default function Login() {
 
       {/* login section */}
       <View style={styles.loginSection}>
-        <TouchableOpacity style={styles.googleButton} activeOpacity={0.9}>
+        <TouchableOpacity
+          style={styles.googleButton}
+          activeOpacity={0.9}
+          onPress={loginHandler}
+        >
           <View style={styles.googleIconContainer}>
             <Ionicons name="logo-google" size={20} color={COLORS.surface} />
           </View>

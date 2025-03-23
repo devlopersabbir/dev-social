@@ -4,6 +4,6 @@ export const COLORS = {
   background: "#000",
   surface: "#1a1a1a",
   surfaceLight: "#2a2a2a",
-  white: "#fffff",
+  white: "#fff",
   gray: "#9ca3af",
 } as const;
