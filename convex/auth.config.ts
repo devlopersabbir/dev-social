@@ -1,7 +1,7 @@
 export default {
   providers: [
     {
-      domain: "https://amazing-gopher-31.clerk.accounts.dev",
+      domain: process.env.EXPO_PUBLIC_CLERK_ISSUE!,
       applicationID: "convex",
     },
   ],

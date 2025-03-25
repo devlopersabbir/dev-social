@@ -1,6 +1,5 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { Webhook } from "svix";
 import { api } from "./_generated/api";
 
 const http = httpRouter();
@@ -24,45 +23,12 @@ http.route({
 
     const payload = await request.json();
     const body = JSON.stringify(payload);
+    console.log(body);
 
-    const wh = new Webhook(webhookSecret);
+    // const wh = new Svix(webhookSecret);
     let evt: any;
+    console.log(body);
 
-    // verify web hook
-    try {
-      evt = wh.verify(body, {
-        "svix-id": svix_id,
-        "svix-signature": svix_signature,
-        "svix-timestamp": svix_timestamp,
-      }) as any;
-    } catch (err) {
-      console.error("error veryfy hoo", err);
-      return new Response("Error occured", {
-        status: 400,
-      });
-    }
-
-    const eventType = evt.type;
-
-    if (eventType === "user.created") {
-      const { id, email_address, first_name, last_name, image_url } = evt.data;
-      const name = `${first_name || ""} ${last_name || ""}`.trim();
-
-      try {
-        await ctx.runMutation(api.users.createUser, {
-          email,
-          fullname: name,
-          image: image_url,
-          clerkId: id,
-          username: email_address?.split("@")[0],
-        });
-      } catch (err) {
-        console.log("Error creating a user", err);
-        return new Response("Error creating a user", {
-          status: 500,
-        });
-      }
-    }
     return new Response("webhook processed successfully", {
       status: 200,
     });
