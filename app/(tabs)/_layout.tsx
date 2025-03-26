@@ -1,25 +1,34 @@
 import { Login } from "@/@types";
-import { defaultLogin } from "@/constants";
 import { COLORS } from "@/constants/theme";
+import { api } from "@/convex/_generated/api";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import { useMutation } from "convex/react";
 import { Tabs } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function TabLayout() {
   const { user, isSignedIn, isLoaded } = useUser();
-  const [login, setLogin] = useState<Login>(defaultLogin);
-  const [loading, setLoading] = useState<boolean>(false);
 
+  const createUser = useMutation(api.users.createUser);
   useEffect(() => {
     if (isLoaded && isSignedIn && user) {
-      // setLogin({
-      //   fullname: user.fullName,
-      //   username: user.username || user.username?.trim()?.split("@")[0],
-      //   email: user.emailAddresses ,
-      //   image: user.imageUrl,
-      //   clerkId: user.id,
-      // });
+      if (!user.primaryEmailAddress?.emailAddress || !user.imageUrl)
+        return alert("email address not found!");
+
+      const inputData: Login = {
+        fullname: user.fullName || "",
+        username:
+          user.username ||
+          user.primaryEmailAddress.emailAddress?.trim()?.split("@")[0] ||
+          "",
+        email: user.primaryEmailAddress?.emailAddress,
+        image: user.imageUrl,
+        clerkId: user.id,
+      };
+      if (inputData) {
+        createUser(inputData);
+      }
     }
   }, [user]);
 

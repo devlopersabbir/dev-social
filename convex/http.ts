@@ -1,6 +1,5 @@
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { api } from "./_generated/api";
 
 const http = httpRouter();
 
@@ -27,7 +26,7 @@ http.route({
 
     // const wh = new Svix(webhookSecret);
     let evt: any;
-    console.log(body);
+    console.log("request body: ", body);
 
     return new Response("webhook processed successfully", {
       status: 200,
