@@ -18,7 +18,7 @@ export default function () {
       <ClerkLoaded>
         <BaseProvider convex={convex}>
           <SafeAreaProvider>
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
               <LayoutProvider />
             </SafeAreaView>
           </SafeAreaProvider>

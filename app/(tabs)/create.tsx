@@ -54,7 +54,7 @@ export default function Create() {
       const res = await FileSystem.uploadAsync(upUrl, selectedImage, {
         httpMethod: "POST",
         uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-        // mimeType: "image/*",
+        mimeType: "image/jpeg",
       });
       if (res.status !== 200) throw new Error("Upload failed");
       const { storageId } = JSON.parse(res.body);
